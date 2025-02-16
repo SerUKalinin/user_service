@@ -1,0 +1,45 @@
+name: Java CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main  # Запускать pipeline при пуше в ветку main
+  pull_request:
+    branches:
+      - main  # Запускать pipeline при создании Pull Request в ветку main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # Используем последнюю версию Ubuntu
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3  # Клонируем репозиторий
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'  # Указываем версию Java (например, 11, 17)
+          distribution: 'temurin'  # Используем Temurin (Adoptium)
+
+      - name: Build with Maven
+        run: mvn -B package --file pom.xml  # Сборка проекта с помощью Maven
+
+      - name: Run tests
+        run: mvn test  # Запуск тестов
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build  # Зависит от успешного завершения job `build`
+    if: github.ref == 'refs/heads/main'  # Запускать только для ветки main
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Deploy to server
+        run: |
+          echo "Добавьте команды для деплоя вашего приложения"
+          # Например, использование SSH для деплоя на сервер:
+          # scp target/your-app.jar user@server:/path/to/deploy
+          # ssh user@server "java -jar /path/to/deploy/your-app.jar"
