@@ -39,10 +39,3 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
-      - name: Deploy to server
-        run: |
-          echo "Добавьте команды для деплоя вашего приложения"
-          # Например, использование SSH для деплоя на сервер:
-          # scp build/libs/your-app.jar user@server:/path/to/deploy
-          # ssh user@server "java -jar /path/to/deploy/your-app.jar"
