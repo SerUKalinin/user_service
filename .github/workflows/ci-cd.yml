@@ -1,4 +1,4 @@
-name: Java CI/CD Pipeline
+name: Java CI/CD Pipeline with Gradle
 
 on:
   push:
@@ -22,11 +22,14 @@ jobs:
           java-version: '17'  # Указываем версию Java (например, 11, 17)
           distribution: 'temurin'  # Используем Temurin (Adoptium)
 
-      - name: Build with Maven
-        run: mvn -B package --file pom.xml  # Сборка проекта с помощью Maven
+      - name: Grant execute permission for Gradle Wrapper
+        run: chmod +x gradlew  # Даем права на выполнение Gradle Wrapper
+
+      - name: Build with Gradle
+        run: ./gradlew build  # Сборка проекта с помощью Gradle
 
       - name: Run tests
-        run: mvn test  # Запуск тестов
+        run: ./gradlew test  # Запуск тестов
 
   deploy:
     runs-on: ubuntu-latest
@@ -36,10 +39,3 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
-      - name: Deploy to server
-        run: |
-          echo "Добавьте команды для деплоя вашего приложения"
-          # Например, использование SSH для деплоя на сервер:
-          # scp target/your-app.jar user@server:/path/to/deploy
-          # ssh user@server "java -jar /path/to/deploy/your-app.jar"
